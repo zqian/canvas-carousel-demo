@@ -1,4 +1,5 @@
 # canvas-carousel-demo
+![image](https://github.com/tl-its-umich-edu/canvas-carousel-demo/assets/27447/741562ba-f6a3-4333-8512-b25946616684)
 
 ## Overview
 
