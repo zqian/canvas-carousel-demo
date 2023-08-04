@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>carousel</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+<style type="text/css" media="screen">
+
+/* Custom colors */
+:root {
+  --mi-blue: #00274C;
+  --mi-blue-light: #0070D9;
+}
+
+/* Layout */
+#canvas-carousel {
+  width: 650px;
+  height: 198.2px;
+  cursor: pointer;
+}
+
+.carousel-inner > .carousel-item > a {
+  margin-left: 50px;
+}
+
+.carousel-inner {
+  border: 1px solid #dddddd;
+  margin-block-end: 0px;
+}
+
+ul, menu, dir {
+  -webkit-padding-start: 0px;
+}
+
+ul, menu, dir {
+  -moz-padding-start: 0px;
+}
+
+/* Controls */
+
+.btn-outline-primary {
+  --bs-btn-color: var(--mi-blue);
+  --bs-btn-border-color: var(--mi-blue);
+  --bs-btn-hover-color: white;
+  --bs-btn-hover-bg: var(--mi-blue-light) !important;
+  --bs-btn-hover-border-color: var(--mi-blue);
+  --bs-btn-active-color: white;
+  --bs-btn-active-bg: var(--mi-blue);
+  --bs-btn-active-border-color: var(--mi-blue);
+}
+
+/* Previous/Next */
+.carousel-control-prev, .carousel-control-next {
+  width: 50px;
+  height: 170px;
+  z-index: 2;
+  opacity: 1.0 !important;
+}
+
+.carousel-control-prev .bi-chevron-left, .carousel-control-next .bi-chevron-right {
+  color: var(--mi-blue);
+  font-size: 32px;
+}
+
+.carousel-control-prev .bi-chevron-left:hover, .carousel-control-next .bi-chevron-right:hover {
+  color: var(--mi-blue-light);
+}
+
+/* visible focus rings */
+.carousel-control-prev:focus-visible, .carousel-control-next:focus-visible, .carousel-item a:focus-visible {
+  outline: var(--bs-blue) auto 1px !important;
+}
+
+/* Play/Pause */
+#play-pause {
+  position: absolute;
+  bottom: 35px;
+  right: 9px;
+  z-index: 999;
+}
+
+/* Indicators */
+.carousel-indicators {
+  margin-bottom: 0 !important;
+}
+
+.carousel-indicators button {
+  height: 15px !important;
+  width: 15px !important;
+  border-radius: 100% !important;
+  opacity: 1 !important;
+  text-indent: 0 !important;
+  color: var(--mi-blue);
+  border: 1px solid var(--mi-blue) !important;
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.carousel-indicators :is(button.active, button.active:hover, button.active:focus-visible) {
+  background-color: var(--mi-blue) !important;
+  color: white !important;
+}
+
+.carousel-indicators :is(button:hover, button:focus-visible) {
+  background-color: var(--mi-blue-light) !important;
+  color: white !important;
+}
+
+@media (prefers-reduced-motion) {
+  body {
+    display: none
+  }
+}
+
+</style>
+</head>
+
+<body class="d-none d-sm-block">
+<div
+  id="canvas-carousel"
+  class="carousel slide carousel-fade"
+  role="complementary"
+  aria-label="Announcement Carousel"
+>
+  <!-- Previous -->
+  <button class="carousel-control-prev" data-bs-target="#canvas-carousel" data-bs-slide="prev" title="Previous Slide" aria-label="Previous Slide">
+    <div class="bi bi-chevron-left"></div>
+  </button>
+  <!-- Wrapper for slides -->
+  <ul id="slide-list" class="carousel-inner" aria-live="polite">
+  </ul>
+  <!-- Next -->
+  <button class="carousel-control-next" data-bs-target="#canvas-carousel" data-bs-slide="next" title="Next Slide" aria-label="Next Slide">
+    <div class="bi bi-chevron-right"></div>
+  </button>
+  <!-- Wrapper for indicators -->
+  <div id="slide-indicators" class="carousel-indicators"></div>
+  <!-- Play/Pause -->
+  <div id="play-pause">
+    <button id="pause" data-bs-toggle="button" class="btn btn-sm btn-outline-primary" aria-label="Pause carousel">
+      <div id="play-pause-icon" class="bi bi-pause-fill"></div>
+    </button>
+  </div>
+</div>
+</body>
+<script>
+  const pathStem = '/canvas-carousel-demo/';
+  const imagePathStem = pathStem + 'content/';
+  const dataPathStem = pathStem + 'data/';
+
+  /*
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+  */
+  function getRandomIndex (length) {
+    if (length < 1) return 0;
+    const max = Math.floor(length - 1);
+    return Math.floor(Math.random() * (max + 1));
+  }
+
+  function SlideEl (slide, active) {
+    const imgEl = document.createElement('img');
+    imgEl.setAttribute('src', imagePathStem + slide.imageFileName); // safe sink
+    imgEl.setAttribute('alt', slide.altText); // safe sink
+
+    const linkEl = document.createElement('a');
+    linkEl.setAttribute('href', slide.linkURL); // safe sink
+    linkEl.setAttribute('target', '_blank');
+    linkEl.append(imgEl);
+
+    const captionEl = document.createElement('p');
+    captionEl.classList.add('carousel-caption', 'visually-hidden');
+    captionEl.setAttribute('id', 'carousel-caption1');
+    captionEl.innerText = 'Select the link to learn more.';
+
+    const listItemEl = document.createElement('li');
+    listItemEl.classList.add('carousel-item');
+    if (active === true) listItemEl.classList.add('active');
+    listItemEl.append(linkEl, captionEl);
+    return listItemEl;
+  }
+
+  function IndicatorEl (index, active) {
+    const slideNumStr = String(index + 1);
+    const label = 'Slide ' + slideNumStr
+    const buttonEl = document.createElement('button');
+    buttonEl.setAttribute('data-bs-target', '#canvas-carousel');
+    buttonEl.setAttribute('data-bs-slide-to', String(index));
+    buttonEl.setAttribute('aria-label', label);
+    buttonEl.setAttribute('title', label);
+    buttonEl.classList.add('btn', 'btn-outline-primary');
+    if (active === true) {
+      buttonEl.classList.add('active');
+      buttonEl.setAttribute('aria-current', 'true');
+    }
+    return buttonEl;
+  }
+
+  async function addElements () {
+    const resp = await fetch(dataPathStem + 'slide-data.json');
+    const { slides, settings } = await resp.json();
+    const startingIndex = settings.startRandom === true ? getRandomIndex(slides.length) : 0;
+    const slideListEl = document.getElementById('slide-list');
+    const indicatorContainer = document.getElementById('slide-indicators');
+
+    slides.forEach((s, i) => {
+      slideListEl.append(SlideEl(s, i === startingIndex));
+      indicatorContainer.append(IndicatorEl(i, i === startingIndex));
+    });
+  }
+
+  async function main () {
+    await addElements();
+
+    const canvasCarouselEl = document.getElementById('canvas-carousel');
+    const pauseEl = document.getElementById('pause');
+    const playPauseIconEl = document.getElementById('play-pause-icon');
+
+    const canvasCarousel = new bootstrap.Carousel(canvasCarouselEl, {
+      interval: 11000, pause: false
+    });
+    canvasCarousel.cycle();
+
+    let paused = false;
+    pauseEl.addEventListener(
+      'click',
+      () => {
+        if (paused) {
+          canvasCarousel.cycle();
+          playPauseIconEl.classList.remove('bi-play-fill');
+          playPauseIconEl.classList.add('bi-pause-fill');
+          paused = false;
+        } else {
+          canvasCarousel.pause();
+          playPauseIconEl.classList.remove('bi-pause-fill');
+          playPauseIconEl.classList.add('bi-play-fill');
+          paused = true;
+        }
+      }
+    );
+  }
+
+  main().catch((r) => console.error(String(r)));
+</script>
+</html>
