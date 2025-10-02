@@ -166,14 +166,19 @@ ul, menu, dir {
 
   function SlideEl (slide, active) {
     const rolesRaw = (window && window.ENV && window.ENV.current_user_roles) || null;
-    rolesString = ''
+    let rolesString = '';
+    let isInstructor = false;
+    
     if (rolesRaw) {
-        if (Array.isArray(rolesRaw)) {
-          rolesString = rolesRaw.join('');
-          isInstructor = rolesRaw.map(r => String(r).toLowerCase().trim()).includes('instructor');
-        } else {
-          rolesString=rolesRaw
-        }
+      if (Array.isArray(rolesRaw)) {
+        rolesString = rolesRaw.join(','); // Use comma or another separator
+        isInstructor = rolesRaw
+          .map(r => String(r).toLowerCase().trim())
+          .includes('instructor');
+      } else {
+        rolesString = String(rolesRaw);
+        isInstructor = String(rolesRaw).toLowerCase().trim() === 'instructor';
+      }
     }
       
     const imgEl = document.createElement('img');
