@@ -165,7 +165,7 @@ ul, menu, dir {
   }
 
   function SlideEl (slide, active) {
-    const rolesRaw = (window && window.ENV && window.ENV.current_user_roles) || null;
+    const rolesRaw = (ENV && ENV.current_user_roles) || null;
     let rolesString = '';
     let isInstructor = false;
     
