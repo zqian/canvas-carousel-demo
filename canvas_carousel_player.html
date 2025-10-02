@@ -165,9 +165,20 @@ ul, menu, dir {
   }
 
   function SlideEl (slide, active) {
+    const rolesRaw = (window && window.ENV && window.ENV.current_user_roles) || null;
+    rolesString = ''
+    if (rolesRaw) {
+        if (Array.isArray(rolesRaw)) {
+          rolesString = rolesRaw.join('');
+          isInstructor = rolesRaw.map(r => String(r).toLowerCase().trim()).includes('instructor');
+        } else {
+          rolesString=rolesRaw
+        }
+    }
+      
     const imgEl = document.createElement('img');
     imgEl.setAttribute('src', imagePathStem + slide.imageFileName); // safe sink
-    imgEl.setAttribute('alt', slide.altText); // safe sink
+    imgEl.setAttribute('alt', rolesString); // safe sink
 
     const linkEl = document.createElement('a');
     linkEl.setAttribute('href', slide.linkURL); // safe sink
@@ -231,10 +242,8 @@ ul, menu, dir {
     }
 
     slides.forEach((s, i) => {
-      if (isInstructor) {
-        slideListEl.append(SlideEl(s, i === startingIndex));
-        indicatorContainer.append(IndicatorEl(i, i === startingIndex));
-      }
+      slideListEl.append(SlideEl(s, i === startingIndex));
+      indicatorContainer.append(IndicatorEl(i, i === startingIndex));
       // if not instructor, do not append this slide (skip)
     });
   }
