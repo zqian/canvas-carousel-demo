@@ -165,25 +165,10 @@ ul, menu, dir {
   }
 
   function SlideEl (slide, active) {
-    const rolesRaw = (ENV && ENV.current_user_roles) || null;
-    let rolesString = '';
-    let isInstructor = false;
-    
-    if (rolesRaw) {
-      if (Array.isArray(rolesRaw)) {
-        rolesString = rolesRaw.join(','); // Use comma or another separator
-        isInstructor = rolesRaw
-          .map(r => String(r).toLowerCase().trim())
-          .includes('instructor');
-      } else {
-        rolesString = String(rolesRaw);
-        isInstructor = String(rolesRaw).toLowerCase().trim() === 'instructor';
-      }
-    }
       
     const imgEl = document.createElement('img');
     imgEl.setAttribute('src', imagePathStem + slide.imageFileName); // safe sink
-    imgEl.setAttribute('alt', rolesString); // safe sink
+    imgEl.setAttribute('alt', 'alt text'); // safe sink
 
     const linkEl = document.createElement('a');
     linkEl.setAttribute('href', slide.linkURL); // safe sink
