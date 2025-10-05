@@ -165,23 +165,6 @@ ul, menu, dir {
   }
 
   function SlideEl (slide, active) {
-
-    const rolesRaw = (ENV && ENV.current_user_roles) || null;
-    let rolesString = '';
-    let isInstructor = false;
-    
-    if (rolesRaw) {
-      if (Array.isArray(rolesRaw)) {
-        rolesString = rolesRaw.join(','); // Use comma or another separator
-        isInstructor = rolesRaw
-          .map(r => String(r).toLowerCase().trim())
-          .includes('instructor');
-      } else {
-        rolesString = String(rolesRaw);
-        isInstructor = String(rolesRaw).toLowerCase().trim() === 'instructor';
-      }
-    }
-
     const imgEl = document.createElement('img');
     imgEl.setAttribute('src', imagePathStem + slide.imageFileName); // safe sink
     imgEl.setAttribute('alt', slide.altText + rolesString); // safe sink
@@ -219,7 +202,7 @@ ul, menu, dir {
     return buttonEl;
   }
 
-  async function addElements () {
+  async function addElements (studentOnly) {
     const resp = await fetch(dataPathStem + 'slide-data.json');
     const { slides, settings } = await resp.json();
     const startingIndex = settings.startRandom === true ? getRandomIndex(slides.length) : 0;
@@ -233,7 +216,11 @@ ul, menu, dir {
   }
 
   async function main () {
-    await addElements();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentRoleOnly = urlParams.has('studentRoleOnly') ? urlParams.get('studentRoleOnly'): 'false';
+
+    await addElements(studentRoleOnly);
 
     const canvasCarouselEl = document.getElementById('canvas-carousel');
     const pauseEl = document.getElementById('pause');
