@@ -202,7 +202,7 @@ ul, menu, dir {
     return buttonEl;
   }
 
-  async function addElements (studentOnly) {
+  async function addElements (studentRoleOnly) {
     const resp = await fetch(dataPathStem + 'slide-data.json');
     const { slides, settings } = await resp.json();
     const startingIndex = settings.startRandom === true ? getRandomIndex(slides.length) : 0;
@@ -210,8 +210,11 @@ ul, menu, dir {
     const indicatorContainer = document.getElementById('slide-indicators');
 
     slides.forEach((s, i) => {
-      slideListEl.append(SlideEl(s, i === startingIndex));
-      indicatorContainer.append(IndicatorEl(i, i === startingIndex));
+      // add slide if current user is not only a student role; or if the slide can be show to students
+      if (studentRoleOnly === 'false' || s.showStudents === true) {
+        slideListEl.append(SlideEl(s, i === startingIndex));
+        indicatorContainer.append(IndicatorEl(i, i === startingIndex));
+      }
     });
   }
 
