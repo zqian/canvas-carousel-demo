@@ -209,12 +209,13 @@ ul, menu, dir {
     const slideListEl = document.getElementById('slide-list');
     const indicatorContainer = document.getElementById('slide-indicators');
 
-    slides.forEach((s, i) => {
-      // add slide if current user is not only a student role; or if the slide can be show to students
-      if (studentRoleOnly === 'false' || s.showStudents === true) {
-        slideListEl.append(SlideEl(s, i === startingIndex));
-        indicatorContainer.append(IndicatorEl(i, i === startingIndex));
-      }
+    const filteredSlides = slides.filter(s =>
+      studentRoleOnly === 'false' || s.showStudents === true
+    );
+
+    filteredSlides.forEach((s, i) => {
+      slideListEl.append(SlideEl(s, i === startingIndex));
+      indicatorContainer.append(IndicatorEl(i, i === startingIndex));
     });
   }
 
