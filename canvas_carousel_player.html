@@ -208,7 +208,7 @@ ul, menu, dir {
 
     // filter slides based on studentRoleOnly query param
     const filteredSlides = slides.filter(s =>
-      studentRoleOnly === 'false' || s.showStudents === true
+      studentRoleOnly === 'false' || typeof s.showStudents === 'undefined' || s.showStudents === true
     );
     const startingIndex = settings.startRandom === true ? getRandomIndex(filteredSlides.length) : 0;
     const slideListEl = document.getElementById('slide-list');
