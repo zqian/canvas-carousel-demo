@@ -205,13 +205,14 @@ ul, menu, dir {
   async function addElements (studentRoleOnly) {
     const resp = await fetch(dataPathStem + 'slide-data.json');
     const { slides, settings } = await resp.json();
-    const startingIndex = settings.startRandom === true ? getRandomIndex(slides.length) : 0;
-    const slideListEl = document.getElementById('slide-list');
-    const indicatorContainer = document.getElementById('slide-indicators');
 
+    // filter slides based on studentRoleOnly query param
     const filteredSlides = slides.filter(s =>
       studentRoleOnly === 'false' || s.showStudents === true
     );
+    const startingIndex = settings.startRandom === true ? getRandomIndex(filteredSlides.length) : 0;
+    const slideListEl = document.getElementById('slide-list');
+    const indicatorContainer = document.getElementById('slide-indicators');
 
     filteredSlides.forEach((s, i) => {
       slideListEl.append(SlideEl(s, i === startingIndex));
