@@ -9,8 +9,7 @@
         {
             "imageFileName": "sample_image_2.png",
             "altText": "Sample Image 2",
-            "linkURL": "https://github.com/tl-its-umich-edu/",
-            "showStudents": false
+            "linkURL": "https://github.com/tl-its-umich-edu/"
         }
     ],
     "settings": {
