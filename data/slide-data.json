@@ -3,13 +3,13 @@
        {
             "imageFileName": "sample_image_1.png",
             "altText": "Sample Image 1",
-            "linkURL": "https://github.com/tl-its-umich-edu/",
-            "showStudents": true
+            "linkURL": "https://github.com/tl-its-umich-edu/"
         },
         {
             "imageFileName": "sample_image_2.png",
-            "altText": "Sample Image 2",
-            "linkURL": "https://github.com/tl-its-umich-edu/"
+            "altText": "Sample Image 2 - DO NOT SHOW STUDENTS",
+            "linkURL": "https://github.com/tl-its-umich-edu/",
+            "showStudents": false
         }
     ],
     "settings": {
