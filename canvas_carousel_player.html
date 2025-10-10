@@ -151,7 +151,7 @@ ul, menu, dir {
 </div>
 </body>
 <script>
-  const pathStem = '/canvas-carousel-demo/';
+  const pathStem = '/canvas-carousel/';
   const imagePathStem = pathStem + 'content/';
   const dataPathStem = pathStem + 'data/';
 
@@ -202,13 +202,20 @@ ul, menu, dir {
     return buttonEl;
   }
 
-  async function addElements (studentRoleOnly) {
+  async function addElements () {
     const resp = await fetch(dataPathStem + 'slide-data.json');
     const { slides, settings } = await resp.json();
-
+    
     // filter slides based on studentRoleOnly query param
+    // include slides that:
+    // - current user is not a student (studentRoleOnly is false)
+    // - doesn't have a showStudents attribute or that are explicitly true
+    let userIsStudent = false;
+    userIsStudent = userRoles.size == 2 && userRoles.includes('student') && userRoles.includes('user');
     const filteredSlides = slides.filter(s =>
-      studentRoleOnly === 'false' || typeof s.showStudents === 'undefined' || s.showStudents === true
+      userIsStudent === 'false' 
+      || typeof s.showStudents === 'undefined' 
+      || s.showStudents === true
     );
     const startingIndex = settings.startRandom === true ? getRandomIndex(filteredSlides.length) : 0;
     const slideListEl = document.getElementById('slide-list');
@@ -221,11 +228,10 @@ ul, menu, dir {
   }
 
   async function main () {
-
     const urlParams = new URLSearchParams(window.location.search);
-    const studentRoleOnly = urlParams.has('studentRoleOnly') ? urlParams.get('studentRoleOnly'): 'false';
-
-    await addElements(studentRoleOnly);
+    // get userRoles[] param; default to empty array
+    const userRoles = urlParams.has('userRoles') ? urlParams.get('userRoles').split(','): [];
+    await addElements(userRoles);
 
     const canvasCarouselEl = document.getElementById('canvas-carousel');
     const pauseEl = document.getElementById('pause');
