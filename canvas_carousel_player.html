@@ -216,7 +216,7 @@ ul, menu, dir {
     userIsStudent = userRoles.length == 2 && userRoles.includes('student') && userRoles.includes('user');
     console.log('userIsStudent=', userIsStudent);
     const filteredSlides = slides.filter(s =>
-      userIsStudent === 'false' 
+      !userIsStudent 
       || typeof s.showStudents === 'undefined' 
       || s.showStudents === true
     );
