@@ -210,12 +210,8 @@ ul, menu, dir {
     // include slides that:
     // - current user is not a student (studentRoleOnly is false)
     // - doesn't have a showStudents attribute or that are explicitly true
-    let userIsStudent = false;
-    console.log('userRoles=', userRoles);
-    console.log('userRoles length=', userRoles.length);
-    userIsStudent = userRoles.length == 2 && userRoles.includes('student') && userRoles.includes('user');
+    const userIsStudent = userRoles.length == 2 && userRoles.includes('student') && userRoles.includes('user');
     console.log('userIsStudent=', userIsStudent);
-    console.log('!userIsStudent=', userIsStudent);
     const filteredSlides = slides.filter(s =>
       !userIsStudent 
       || typeof s.showStudents === 'undefined' 
