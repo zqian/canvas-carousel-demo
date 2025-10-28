@@ -211,6 +211,7 @@ ul, menu, dir {
     // - current user is not a student (studentRoleOnly is false)
     // - doesn't have a showStudents attribute or that are explicitly true
     let userIsStudent = false;
+    console.log('userRoles', userRoles);
     userIsStudent = userRoles.size == 2 && userRoles.includes('student') && userRoles.includes('user');
     console.log('userIsStudent', userIsStudent);
     const filteredSlides = slides.filter(s =>
