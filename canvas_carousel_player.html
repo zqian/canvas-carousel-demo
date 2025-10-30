@@ -212,10 +212,10 @@ ul, menu, dir {
     // - doesn't have a showStudents attribute or that are explicitly true
     const userIsStudent = userRoles.length == 2 && userRoles.includes('student') && userRoles.includes('user');
     console.log('userIsStudent=', userIsStudent);
-    const filteredSlides = slides.filter(s =>
+    const filteredSlides = slides.filter(s => {
       if (!userIsStudent) return true; // non-students see all slides
       return s.showStudents !== false; // students only skip slides explicitly hidden
-    );
+    });
     const startingIndex = settings.startRandom === true ? getRandomIndex(filteredSlides.length) : 0;
     const slideListEl = document.getElementById('slide-list');
     const indicatorContainer = document.getElementById('slide-indicators');
